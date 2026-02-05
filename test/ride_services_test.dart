@@ -1,0 +1,11 @@
+import 'package:blabla/model/ride/locations.dart';
+import 'package:blabla/service/rides_service.dart';
+
+void main() {
+  print(
+    RidesService.filterBy(
+      departure: Location(name: "Dijon", country: Country.france),
+      seatRequested: 2,
+    ).toList(),
+  );
+}
