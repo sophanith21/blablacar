@@ -8,48 +8,35 @@ class RidesService {
   //
   //  filter the rides starting from given departure location
   //
-  static List<Ride> _filterByDeparture(Location departure) {
-    return availableRides
-        .where((e) => e.departureLocation == departure)
-        .toList();
+  static List<Ride> _filterByDeparture(
+    List<Ride> rideList,
+    Location departure,
+  ) {
+    return rideList.where((e) => e.departureLocation == departure).toList();
   }
 
   //
   //  filter the rides starting for the given requested seat number
   //
-  static List<Ride> _filterBySeatRequested(int requestedSeat) {
-    return availableRides
-        .where((e) => e.remainingSeats >= requestedSeat)
-        .toList();
+  static List<Ride> _filterBySeatRequested(
+    List<Ride> rideList,
+    int requestedSeat,
+  ) {
+    return rideList.where((e) => e.remainingSeats >= requestedSeat).toList();
   }
 
   //
   //  filter the rides   with several optional criteria (flexible filter options)
   //
   static List<Ride> filterBy({Location? departure, int? seatRequested}) {
-    List<Ride> newList = [];
-    if (departure != null && seatRequested != null) {
-      newList = _filterByDeparture(departure);
-      newList = _filterSeatByNewList(newList, seatRequested);
-    } else if (departure != null && seatRequested == null) {
-      newList = _filterByDeparture(departure);
-    } else {
-      newList = _filterBySeatRequested(seatRequested!);
+    List<Ride> result = availableRides;
+    if (departure != null) {
+      result = _filterByDeparture(result, departure);
     }
-    return newList;
-  }
 
-  static List<Ride> _filterSeatByNewList(
-    List<Ride> newList,
-    int seatRequested,
-  ) {
-    return newList.where((e) => e.remainingSeats >= seatRequested).toList();
-  }
-
-  static List<Ride> _filterDepartureByNewList(
-    List<Ride> newList,
-    Location departure,
-  ) {
-    return newList.where((e) => e.departureLocation == departure).toList();
+    if (seatRequested != null) {
+      result = _filterBySeatRequested(result, seatRequested);
+    }
+    return result;
   }
 }
