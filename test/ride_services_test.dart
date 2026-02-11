@@ -1,5 +1,5 @@
-import 'package:blabla/model/ride/locations.dart';
-import 'package:blabla/service/rides_service.dart';
+import 'package:blabla/models/ride/locations.dart';
+import 'package:blabla/services/rides_service.dart';
 
 void main() {
   print(

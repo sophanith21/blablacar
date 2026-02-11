@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../model/ride_pref/ride_pref.dart';
-import '../../service/ride_prefs_service.dart';
+import '../../models/ride_pref/ride_pref.dart';
+import '../../services/ride_prefs_service.dart';
 import '../../theme/theme.dart';
 
 import 'widgets/ride_pref_form.dart';
@@ -23,7 +23,7 @@ class RidePrefScreen extends StatefulWidget {
 
 class _RidePrefScreenState extends State<RidePrefScreen> {
   void onRidePrefSelected(RidePref ridePref) {
-    // 1 - Navigate to the rides screen (with a buttom to top animation)
+    // 1 - Navigate to the rides screen (with a button to top animation)
   }
 
   @override

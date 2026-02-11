@@ -1,6 +1,6 @@
 import '../dummy_data/dummy_data.dart';
-import '../model/ride/locations.dart';
-import '../model/ride/ride.dart';
+import '../models/ride/locations.dart';
+import '../models/ride/ride.dart';
 
 class RidesService {
   static List<Ride> availableRides = fakeRides; // TODO for now fake data
