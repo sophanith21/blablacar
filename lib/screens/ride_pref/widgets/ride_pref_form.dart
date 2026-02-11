@@ -1,6 +1,7 @@
 import 'package:blabla/screens/location_picker/location_picker_screen.dart';
 import 'package:blabla/screens/ride_pref/widgets/pref_form_field.dart';
 import 'package:blabla/screens/ride_selection/ride_selection_screen.dart';
+import 'package:blabla/screens/seat_setter/seat_setter_screen.dart';
 import 'package:blabla/services/locations_service.dart';
 import 'package:blabla/services/ride_prefs_service.dart';
 import 'package:blabla/theme/theme.dart';
@@ -24,8 +25,9 @@ import '../../../models/ride_pref/ride_pref.dart';
 class RidePrefForm extends StatefulWidget {
   // The form can be created with an optional initial RidePref.
   final RidePref? initRidePref;
+  final ValueChanged<RidePref> onSearch;
 
-  const RidePrefForm({super.key, this.initRidePref});
+  const RidePrefForm({super.key, this.initRidePref, required this.onSearch});
 
   @override
   State<RidePrefForm> createState() => _RidePrefFormState();
@@ -113,13 +115,18 @@ class _RidePrefFormState extends State<RidePrefForm> {
     }
   }
 
-  Future<void> onSearchTap() async {
-    await Navigator.push(
+  Future<void> onSeatSetterTap() async {
+    int? selectedSeatSize = await Navigator.push(
       context,
       AnimationUtils.createBottomToTopRoute(
-        RideSelectionScreen(ridePref: RidePrefService.currentRidePref!),
+        SeatSetterScreen(initRequestedSeat: requestedSeats),
       ),
     );
+    if (selectedSeatSize != null) {
+      setState(() {
+        requestedSeats = selectedSeatSize;
+      });
+    }
   }
 
   // ----------------------------------
@@ -134,7 +141,13 @@ class _RidePrefFormState extends State<RidePrefForm> {
         departure != arrival &&
         departureDate.day.compareTo(DateTime.now().day) >= 0 &&
         requestedSeats > 0) {
-      return onSearchTap;
+      RidePref newRidePref = RidePref(
+        departure: departure!,
+        departureDate: departureDate,
+        arrival: arrival!,
+        requestedSeats: requestedSeats,
+      );
+      return () => widget.onSearch(newRidePref);
     } else {
       return null;
     }
@@ -199,7 +212,7 @@ class _RidePrefFormState extends State<RidePrefForm> {
                 PrefFormField(
                   iconData: Icons.person_outline,
                   label: requestedSeats.toString(),
-                  onTap: () {},
+                  onTap: onSeatSetterTap,
                 ),
               ],
             ),

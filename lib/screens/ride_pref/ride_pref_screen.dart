@@ -1,3 +1,5 @@
+import 'package:blabla/screens/ride_selection/ride_selection_screen.dart';
+import 'package:blabla/utils/animations_util.dart';
 import 'package:flutter/material.dart';
 
 import '../../models/ride_pref/ride_pref.dart';
@@ -22,11 +24,32 @@ class RidePrefScreen extends StatefulWidget {
 }
 
 class _RidePrefScreenState extends State<RidePrefScreen> {
-  void onRidePrefSelected(RidePref ridePref) {
+  Future<void> onRidePrefSelected(RidePref ridePref) async {
     // 1 - Navigate to the rides screen (with a button to top animation)
     setState(() {
       RidePrefService.currentRidePref = ridePref;
     });
+
+    await Navigator.push(
+      context,
+      AnimationUtils.createBottomToTopRoute(
+        RideSelectionScreen(ridePref: RidePrefService.currentRidePref!),
+      ),
+    );
+  }
+
+  Future<void> onSearch(RidePref ridePref) async {
+    setState(() {
+      RidePrefService.currentRidePref = ridePref;
+      RidePrefService.ridePrefsHistory.add(ridePref);
+    });
+
+    await Navigator.push(
+      context,
+      AnimationUtils.createBottomToTopRoute(
+        RideSelectionScreen(ridePref: RidePrefService.currentRidePref!),
+      ),
+    );
   }
 
   @override
@@ -73,7 +96,10 @@ class _RidePrefScreenState extends State<RidePrefScreen> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               // 2.1 Display the Form to input the ride preferences
-              RidePrefForm(initRidePref: RidePrefService.currentRidePref),
+              RidePrefForm(
+                initRidePref: RidePrefService.currentRidePref,
+                onSearch: onSearch,
+              ),
               SizedBox(height: BlaSpacings.m),
 
               // 2.2 Optionally display a list of past preferences
