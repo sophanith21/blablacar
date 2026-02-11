@@ -24,6 +24,9 @@ class RidePrefScreen extends StatefulWidget {
 class _RidePrefScreenState extends State<RidePrefScreen> {
   void onRidePrefSelected(RidePref ridePref) {
     // 1 - Navigate to the rides screen (with a button to top animation)
+    setState(() {
+      RidePrefService.currentRidePref = ridePref;
+    });
   }
 
   @override

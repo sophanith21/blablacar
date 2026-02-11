@@ -5,7 +5,8 @@ class BlaButton extends StatelessWidget {
   final String label;
   final bool? isSecondary;
   final IconData? iconData;
-  final VoidCallback onTap;
+  final VoidCallback? onTap;
+  final double? borderRadius;
 
   const BlaButton({
     super.key,
@@ -13,6 +14,7 @@ class BlaButton extends StatelessWidget {
     this.isSecondary,
     this.iconData,
     required this.onTap,
+    this.borderRadius,
   });
 
   @override
@@ -23,6 +25,11 @@ class BlaButton extends StatelessWidget {
               foregroundColor: BlaColors.primary,
               iconColor: BlaColors.primary,
               side: BorderSide(color: BlaColors.greyLight, width: 2),
+              shape: borderRadius != null
+                  ? RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(borderRadius!),
+                    )
+                  : null,
             ),
             onPressed: onTap,
             child: Row(
@@ -32,7 +39,14 @@ class BlaButton extends StatelessWidget {
             ),
           )
         : FilledButton(
-            style: FilledButton.styleFrom(backgroundColor: BlaColors.primary),
+            style: FilledButton.styleFrom(
+              backgroundColor: BlaColors.primary,
+              shape: borderRadius != null
+                  ? RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(borderRadius!),
+                    )
+                  : null,
+            ),
             onPressed: onTap,
             child: Row(
               mainAxisSize: MainAxisSize.min,

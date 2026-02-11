@@ -20,6 +20,7 @@ class RidePrefHistoryTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
+      contentPadding: EdgeInsets.symmetric(horizontal: 20),
       onTap: onTap,
       title: Text(
         title,

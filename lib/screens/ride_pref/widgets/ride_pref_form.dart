@@ -1,3 +1,7 @@
+import 'package:blabla/screens/ride_pref/widgets/pref_form_field.dart';
+import 'package:blabla/theme/theme.dart';
+import 'package:blabla/utils/date_time_util.dart';
+import 'package:blabla/widgets/actions/bla_button.dart';
 import 'package:flutter/material.dart';
 
 import '../../../models/ride/locations.dart';
@@ -35,27 +39,133 @@ class _RidePrefFormState extends State<RidePrefForm> {
   @override
   void initState() {
     super.initState();
-    // TODO
+    if (widget.initRidePref != null) {
+      departure = widget.initRidePref?.departure;
+      departureDate = widget.initRidePref!.departureDate;
+      arrival = widget.initRidePref!.arrival;
+      requestedSeats = widget.initRidePref!.requestedSeats;
+    } else {
+      departureDate = DateTime.now();
+      requestedSeats = 1;
+    }
+  }
+
+  @override
+  void didUpdateWidget(covariant RidePrefForm oldWidget) {
+    if (widget.initRidePref != oldWidget.initRidePref) {
+      setState(() {
+        departure = widget.initRidePref?.departure;
+        departureDate = widget.initRidePref!.departureDate;
+        arrival = widget.initRidePref!.arrival;
+        requestedSeats = widget.initRidePref!.requestedSeats;
+      });
+    }
+    super.didUpdateWidget(oldWidget);
   }
 
   // ----------------------------------
   // Handle events
   // ----------------------------------
+  void onLocationSwap() {
+    setState(() {
+      var tempLocation = departure;
+      departure = arrival;
+      arrival = tempLocation;
+    });
+  }
 
   // ----------------------------------
   // Compute the widgets rendering
   // ----------------------------------
+  String get departureLabel => departure?.name ?? "Leaving from";
+  String get arrivalLabel => arrival?.name ?? "Going to";
+
+  VoidCallback? getSearchFunction() {
+    if (departure != null &&
+        arrival != null &&
+        departureDate.compareTo(DateTime.now()) >= 0 &&
+        requestedSeats > 0) {
+      return () {};
+    } else {
+      return null;
+    }
+  }
+
+  VoidCallback? getSwapFunction() {
+    if (departure != null && arrival != null) {
+      return onLocationSwap;
+    } else {
+      return null;
+    }
+  }
 
   // ----------------------------------
   // Build the widgets
   // ----------------------------------
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [ 
- 
-        ]);
+    return ClipRRect(
+      clipBehavior: Clip.hardEdge,
+      borderRadius: BorderRadius.circular(BlaSpacings.radius),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Padding(
+            padding: const EdgeInsets.fromLTRB(0, 8.0, 0, 0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                PrefFormField.withTrail(
+                  iconWeight: FontWeight.bold,
+                  iconData: Icons.circle_outlined,
+                  label: departureLabel,
+                  onTap: () {},
+                  trailingIconData: Icons.swap_vert_outlined,
+                  onTrailTap: getSwapFunction(),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 40),
+                  child: Divider(height: 5),
+                ),
+                PrefFormField(
+                  iconWeight: FontWeight.bold,
+                  iconData: Icons.circle_outlined,
+                  label: arrivalLabel,
+                  onTap: () {},
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 40),
+                  child: Divider(height: 5),
+                ),
+                PrefFormField(
+                  iconData: Icons.date_range_outlined,
+                  label: DateTimeUtils.formatDateTime(departureDate),
+                  onTap: () {},
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 40),
+                  child: Divider(height: 5),
+                ),
+                PrefFormField(
+                  iconData: Icons.person_outline,
+                  label: requestedSeats.toString(),
+                  onTap: () {},
+                ),
+              ],
+            ),
+          ),
+
+          SizedBox(
+            height: 50,
+            child: BlaButton(
+              label: "Search",
+              onTap: getSearchFunction(),
+              borderRadius: 0,
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }
