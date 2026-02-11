@@ -1,6 +1,8 @@
 import 'package:blabla/screens/location_picker/location_picker_screen.dart';
 import 'package:blabla/screens/ride_pref/widgets/pref_form_field.dart';
+import 'package:blabla/screens/ride_selection/ride_selection_screen.dart';
 import 'package:blabla/services/locations_service.dart';
+import 'package:blabla/services/ride_prefs_service.dart';
 import 'package:blabla/theme/theme.dart';
 import 'package:blabla/utils/animations_util.dart';
 import 'package:blabla/utils/date_time_util.dart';
@@ -111,6 +113,15 @@ class _RidePrefFormState extends State<RidePrefForm> {
     }
   }
 
+  Future<void> onSearchTap() async {
+    await Navigator.push(
+      context,
+      AnimationUtils.createBottomToTopRoute(
+        RideSelectionScreen(ridePref: RidePrefService.currentRidePref!),
+      ),
+    );
+  }
+
   // ----------------------------------
   // Compute the widgets rendering
   // ----------------------------------
@@ -123,7 +134,7 @@ class _RidePrefFormState extends State<RidePrefForm> {
         departure != arrival &&
         departureDate.day.compareTo(DateTime.now().day) >= 0 &&
         requestedSeats > 0) {
-      return () {};
+      return onSearchTap;
     } else {
       return null;
     }
