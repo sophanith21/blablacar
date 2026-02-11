@@ -1,8 +1,6 @@
 import 'package:blabla/models/ride/locations.dart';
-import 'package:blabla/models/ride_pref/ride_pref.dart';
 import 'package:blabla/screens/location_picker/widgets/location_tile.dart';
 import 'package:blabla/services/locations_service.dart';
-import 'package:blabla/services/ride_prefs_service.dart';
 import 'package:blabla/theme/theme.dart';
 import 'package:flutter/material.dart';
 

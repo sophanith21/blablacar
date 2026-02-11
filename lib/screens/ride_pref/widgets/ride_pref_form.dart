@@ -2,6 +2,7 @@ import 'package:blabla/screens/location_picker/location_picker_screen.dart';
 import 'package:blabla/screens/ride_pref/widgets/pref_form_field.dart';
 import 'package:blabla/services/locations_service.dart';
 import 'package:blabla/theme/theme.dart';
+import 'package:blabla/utils/animations_util.dart';
 import 'package:blabla/utils/date_time_util.dart';
 import 'package:blabla/widgets/actions/bla_button.dart';
 import 'package:flutter/material.dart';
@@ -79,13 +80,11 @@ class _RidePrefFormState extends State<RidePrefForm> {
   Future<void> onDepartureTap() async {
     Location? selectedLocation = await Navigator.push(
       context,
-      MaterialPageRoute(
-        builder: (context) {
-          return LocationPickerScreen(
-            currentLocationName: departure?.name ?? "",
-            locationHistory: LocationsService.locationHistories,
-          );
-        },
+      AnimationUtils.createBottomToTopRoute(
+        LocationPickerScreen(
+          currentLocationName: departure?.name ?? "",
+          locationHistory: LocationsService.locationHistories,
+        ),
       ),
     );
     if (selectedLocation != null) {
@@ -98,13 +97,11 @@ class _RidePrefFormState extends State<RidePrefForm> {
   Future<void> onArrivalTap() async {
     Location? selectedLocation = await Navigator.push(
       context,
-      MaterialPageRoute(
-        builder: (context) {
-          return LocationPickerScreen(
-            currentLocationName: arrival?.name ?? "",
-            locationHistory: LocationsService.locationHistories,
-          );
-        },
+      AnimationUtils.createBottomToTopRoute(
+        LocationPickerScreen(
+          currentLocationName: arrival?.name ?? "",
+          locationHistory: LocationsService.locationHistories,
+        ),
       ),
     );
     if (selectedLocation != null) {
