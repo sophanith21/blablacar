@@ -32,6 +32,7 @@ class PrefFormField extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       contentPadding: EdgeInsets.symmetric(horizontal: 20),
+      onTap: onTap,
       leading: Icon(
         iconData,
         fontWeight: iconWeight,

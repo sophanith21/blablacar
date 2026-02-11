@@ -1,4 +1,6 @@
+import 'package:blabla/screens/location_picker/location_picker_screen.dart';
 import 'package:blabla/screens/ride_pref/widgets/pref_form_field.dart';
+import 'package:blabla/services/locations_service.dart';
 import 'package:blabla/theme/theme.dart';
 import 'package:blabla/utils/date_time_util.dart';
 import 'package:blabla/widgets/actions/bla_button.dart';
@@ -74,6 +76,44 @@ class _RidePrefFormState extends State<RidePrefForm> {
     });
   }
 
+  Future<void> onDepartureTap() async {
+    Location? selectedLocation = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) {
+          return LocationPickerScreen(
+            currentLocationName: departure?.name ?? "",
+            locationHistory: LocationsService.locationHistories,
+          );
+        },
+      ),
+    );
+    if (selectedLocation != null) {
+      setState(() {
+        departure = selectedLocation;
+      });
+    }
+  }
+
+  Future<void> onArrivalTap() async {
+    Location? selectedLocation = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) {
+          return LocationPickerScreen(
+            currentLocationName: arrival?.name ?? "",
+            locationHistory: LocationsService.locationHistories,
+          );
+        },
+      ),
+    );
+    if (selectedLocation != null) {
+      setState(() {
+        arrival = selectedLocation;
+      });
+    }
+  }
+
   // ----------------------------------
   // Compute the widgets rendering
   // ----------------------------------
@@ -83,7 +123,8 @@ class _RidePrefFormState extends State<RidePrefForm> {
   VoidCallback? getSearchFunction() {
     if (departure != null &&
         arrival != null &&
-        departureDate.compareTo(DateTime.now()) >= 0 &&
+        departure != arrival &&
+        departureDate.day.compareTo(DateTime.now().day) >= 0 &&
         requestedSeats > 0) {
       return () {};
     } else {
@@ -120,7 +161,7 @@ class _RidePrefFormState extends State<RidePrefForm> {
                   iconWeight: FontWeight.bold,
                   iconData: Icons.circle_outlined,
                   label: departureLabel,
-                  onTap: () {},
+                  onTap: onDepartureTap,
                   trailingIconData: Icons.swap_vert_outlined,
                   onTrailTap: getSwapFunction(),
                 ),
@@ -132,7 +173,7 @@ class _RidePrefFormState extends State<RidePrefForm> {
                   iconWeight: FontWeight.bold,
                   iconData: Icons.circle_outlined,
                   label: arrivalLabel,
-                  onTap: () {},
+                  onTap: onArrivalTap,
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 40),
